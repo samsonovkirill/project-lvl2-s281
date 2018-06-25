@@ -1,4 +1,4 @@
-# Brain games
+# Gendiff
 <a href="https://codeclimate.com/github/samsonovkirill/project-lvl2-s281/maintainability">
   <img src="https://api.codeclimate.com/v1/badges/f2e356fd4daf38dca2d6/maintainability" />
 </a>
