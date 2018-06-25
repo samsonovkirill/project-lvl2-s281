@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import init from '../index';
+import { init } from '..';
 
 const program = init();
 program.parse(process.argv);

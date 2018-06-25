@@ -7,7 +7,8 @@
     "babel-node": "babel-node",
     "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
     "prepublishOnly": "npm run build",
-    "eslint": "eslint"
+    "eslint": "eslint",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -25,23 +26,27 @@
   },
   "homepage": "https://github.com/samsonovkirill/project-lvl2-s281#readme",
   "dependencies": {
-    "commander": "^2.15.1"
+    "commander": "^2.15.1",
+    "lodash": "^4.17.10"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "*",
+    "babel-jest": "^23.2.0",
     "babel-preset-env": "*",
     "babel-preset-stage-0": "*",
     "eslint": "*",
     "eslint-config-airbnb-base": "*",
     "eslint-plugin-babel": "^5.1.0",
-    "eslint-plugin-import": "*"
+    "eslint-plugin-import": "*",
+    "jest": "^23.1.0",
+    "regenerator-runtime": "^0.12.0"
   },
   "bin": {
     "gendiff": "dist/bin/gendiff.js"
   },
   "files": [
-   "dist"
+    "dist"
   ]
 }
