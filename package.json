@@ -1,0 +1,44 @@
+{
+  "name": "gendiff-package",
+  "version": "0.0.2",
+  "description": " Compares two configuration files and shows a difference.",
+  "main": "index.js",
+  "scripts": {
+    "babel-node": "babel-node",
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublishOnly": "npm run build",
+    "eslint": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samsonovkirill/project-lvl1-s280.git"
+  },
+  "keywords": [
+    "gendiff",
+    "configuration",
+    "difference"
+  ],
+  "author": "Kirill Samsonov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samsonovkirill/project-lvl1-s280/issues"
+  },
+  "homepage": "https://github.com/samsonovkirill/project-lvl1-s280#readme",
+  "dependencies": {
+    "commander": "^2.15.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "*",
+    "babel-preset-env": "*",
+    "babel-preset-stage-0": "*",
+    "eslint": "*",
+    "eslint-config-airbnb-base": "*",
+    "eslint-plugin-babel": "^5.1.0",
+    "eslint-plugin-import": "*"
+  },
+  "bin": {
+    "gendiff": "dist/bin/gendiff.js"
+  }
+}
