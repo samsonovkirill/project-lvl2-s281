@@ -21,9 +21,9 @@
   "author": "Kirill Samsonov",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/samsonovkirill/project-lvl1-s280/issues"
+    "url": "https://github.com/samsonovkirill/project-lvl2-s281/issues"
   },
-  "homepage": "https://github.com/samsonovkirill/project-lvl1-s280#readme",
+  "homepage": "https://github.com/samsonovkirill/project-lvl2-s281#readme",
   "dependencies": {
     "commander": "^2.15.1"
   },
