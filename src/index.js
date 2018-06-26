@@ -10,36 +10,39 @@ const constructString = {
   unmodified: ({ key, value }) => `   ${key}: ${value}\n`,
 };
 
-const genDiffs = (filePathBefore, filePathAfter) => {
-  try {
-    const beforeFileRaw = fs.readFileSync(filePathBefore, 'utf8');
-    const afterFileRaw = fs.readFileSync(filePathAfter, 'utf8');
-    const beforeFile = JSON.parse(beforeFileRaw);
-    const afterFile = JSON.parse(afterFileRaw);
-    const resultKeys = _.union(Object.keys(beforeFile), Object.keys(afterFile));
-    const diffs = resultKeys.reduce((acc, key) => {
-      if (!_.has(beforeFile, key)) {
-        return [...acc, { key, value: afterFile[key], type: 'new' }];
-      }
-      if (!_.has(afterFile, key)) {
-        return [...acc, { key, value: beforeFile[key], type: 'deleted' }];
-      }
-      if (beforeFile[key] !== afterFile[key]) {
-        return [...acc, {
-          key,
-          value: beforeFile[key],
-          newValue: afterFile[key],
-          type: 'modified',
-        }];
-      }
-      return [...acc, { key, value: beforeFile[key], type: 'unmodified' }];
-    }, []);
+const getDiffObject = (beforeFile, afterFile) => {
+  const resultKeys = _.union(Object.keys(beforeFile), Object.keys(afterFile));
+  return resultKeys.reduce((acc, key) => {
+    if (!_.has(beforeFile, key)) {
+      return [...acc, { key, value: afterFile[key], type: 'new' }];
+    }
+    if (!_.has(afterFile, key)) {
+      return [...acc, { key, value: beforeFile[key], type: 'deleted' }];
+    }
+    if (beforeFile[key] !== afterFile[key]) {
+      return [...acc, {
+        key,
+        value: beforeFile[key],
+        newValue: afterFile[key],
+        type: 'modified',
+      }];
+    }
+    return [...acc, { key, value: beforeFile[key], type: 'unmodified' }];
+  }, []);
+};
 
-    const resultString = diffs.reduce((acc, item) => {
-      const curString = constructString[item.type](item);
-      return `${acc}${curString}`;
+const genDiffs = (beforeFilePath, afterFilePath) => {
+  try {
+    const beforeFileRaw = fs.readFileSync(beforeFilePath, 'utf8');
+    const afterFileRaw = fs.readFileSync(afterFilePath, 'utf8');
+    const beforeFileData = JSON.parse(beforeFileRaw);
+    const afterFileData = JSON.parse(afterFileRaw);
+    const diffs = getDiffObject(beforeFileData, afterFileData);
+    const resultDiffsString = diffs.reduce((acc, line) => {
+      const currentLine = constructString[line.type](line);
+      return `${acc}${currentLine}`;
     }, '');
-    return `\n{\n${resultString}}`;
+    return `\n{\n${resultDiffsString}}`;
   } catch (e) {
     throw e;
   }
@@ -52,8 +55,8 @@ const init = () => {
     .description('Compares two configuration files and shows a difference.')
     .option('-f, --format [type]', 'output format')
     .action((firstConfig, secondConfig) => {
-      const diff = genDiffs(firstConfig, secondConfig);
-      console.log(diff);
+      const diffs = genDiffs(firstConfig, secondConfig);
+      console.log(diffs);
     });
   return program;
 };
