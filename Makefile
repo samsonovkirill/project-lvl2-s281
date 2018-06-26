@@ -12,3 +12,5 @@ watch:
 	npm run watch
 build:
 	npm run build
+	npm run eslint .
+	npm run test

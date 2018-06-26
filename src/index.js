@@ -1,7 +1,5 @@
-import program from 'commander';
 import fs from 'fs';
 import _ from 'lodash';
-import { version } from '../package.json';
 
 const getDiffObject = (beforeFile, afterFile) => {
   const resultKeys = _.union(Object.keys(beforeFile), Object.keys(afterFile));
@@ -32,35 +30,16 @@ const constructString = {
 };
 
 const genDiffs = (beforeFilePath, afterFilePath) => {
-  try {
-    const beforeFileRaw = fs.readFileSync(beforeFilePath, 'utf8');
-    const afterFileRaw = fs.readFileSync(afterFilePath, 'utf8');
-    const beforeFileData = JSON.parse(beforeFileRaw);
-    const afterFileData = JSON.parse(afterFileRaw);
-    const diffs = getDiffObject(beforeFileData, afterFileData);
-    const resultDiffsString = diffs.reduce((acc, line) => {
-      const currentLine = constructString[line.type](line);
-      return `${acc}${currentLine}`;
-    }, '');
-    return `{\n${resultDiffsString}}\n`;
-  } catch (e) {
-    throw e;
-  }
-};
-
-
-const init = () => {
-  program
-    .version(version)
-    .arguments('gendiff <firstConfig> <secondConfig>')
-    .description('Compares two configuration files and shows a difference.')
-    .option('-f, --format [type]', 'output format')
-    .action((firstConfig, secondConfig) => {
-      const diffs = genDiffs(firstConfig, secondConfig);
-      console.log(diffs);
-    });
-  return program;
+  const beforeFileRaw = fs.readFileSync(beforeFilePath, 'utf8');
+  const afterFileRaw = fs.readFileSync(afterFilePath, 'utf8');
+  const beforeFileData = JSON.parse(beforeFileRaw);
+  const afterFileData = JSON.parse(afterFileRaw);
+  const diffs = getDiffObject(beforeFileData, afterFileData);
+  const resultDiffsString = diffs.reduce((acc, line) => {
+    const currentLine = constructString[line.type](line);
+    return `${acc}${currentLine}`;
+  }, '');
+  return `{\n${resultDiffsString}}\n`;
 };
 
 export default genDiffs;
-export { init };
