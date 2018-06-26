@@ -3,13 +3,6 @@ import fs from 'fs';
 import _ from 'lodash';
 import { version } from '../package.json';
 
-const constructString = {
-  new: ({ key, value }) => ` + ${key}: ${value}\n`,
-  deleted: ({ key, value }) => ` - ${key}: ${value}\n`,
-  modified: ({ key, value, newValue }) => ` + ${key}: ${newValue}\n - ${key}: ${value}\n`,
-  unmodified: ({ key, value }) => `   ${key}: ${value}\n`,
-};
-
 const getDiffObject = (beforeFile, afterFile) => {
   const resultKeys = _.union(Object.keys(beforeFile), Object.keys(afterFile));
   return resultKeys.reduce((acc, key) => {
@@ -31,6 +24,13 @@ const getDiffObject = (beforeFile, afterFile) => {
   }, []);
 };
 
+const constructString = {
+  new: ({ key, value }) => ` + ${key}: ${value}\n`,
+  deleted: ({ key, value }) => ` - ${key}: ${value}\n`,
+  modified: ({ key, value, newValue }) => ` + ${key}: ${newValue}\n - ${key}: ${value}\n`,
+  unmodified: ({ key, value }) => `   ${key}: ${value}\n`,
+};
+
 const genDiffs = (beforeFilePath, afterFilePath) => {
   try {
     const beforeFileRaw = fs.readFileSync(beforeFilePath, 'utf8');
@@ -42,11 +42,12 @@ const genDiffs = (beforeFilePath, afterFilePath) => {
       const currentLine = constructString[line.type](line);
       return `${acc}${currentLine}`;
     }, '');
-    return `\n{\n${resultDiffsString}}`;
+    return `{\n${resultDiffsString}}\n`;
   } catch (e) {
     throw e;
   }
 };
+
 
 const init = () => {
   program
