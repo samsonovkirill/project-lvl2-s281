@@ -49,8 +49,23 @@ describe('YAML test suite #2', () => {
   });
 });
 
+describe('INI test suite #3', () => {
+  test('Calculate difference between two files #1', () => {
+    const path1 = `${fixPath}/3/test1__before.ini`;
+    const path2 = `${fixPath}/3/test1__after.ini`;
+    const result = fs.readFileSync(`${fixPath}/3/test1__expected.txt`, 'utf8');
+    expect(genDiffs(path1, path2)).toBe(result);
+  });
 
-describe('Common error suites #3', () => {
+  test('Calculate difference between two files #2', () => {
+    const path1 = `${fixPath}/3/test2__before.ini`;
+    const path2 = `${fixPath}/3/test2__after.ini`;
+    const result = fs.readFileSync(`${fixPath}/3/test2__expected.txt`, 'utf8');
+    expect(genDiffs(path1, path2)).toBe(result);
+  });
+});
+
+describe('Common error suites #4', () => {
   test('File not exists #1', () => {
     const path1 = 'undefined1';
     const path2 = 'undefined2';
@@ -60,7 +75,7 @@ describe('Common error suites #3', () => {
   });
 
   test('File contains corrupted JSON #2', () => {
-    const path1 = `${fixPath}/3/corrupted.json`;
+    const path1 = `${fixPath}/4/corrupted.json`;
     const path2 = `${fixPath}/1/test1-2__before.json`;
     expect(() => {
       genDiffs(path1, path2);
@@ -68,8 +83,8 @@ describe('Common error suites #3', () => {
   });
 
   test('File contains corrupted YAML #3', () => {
-    const path1 = `${fixPath}/3/corrupted.yml`;
-    const path2 = `${fixPath}/3/corrupted.yml`;
+    const path1 = `${fixPath}/4/corrupted.yml`;
+    const path2 = `${fixPath}/4/corrupted.yml`;
     expect(() => {
       genDiffs(path1, path2);
     }).toThrow();

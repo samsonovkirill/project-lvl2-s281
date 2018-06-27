@@ -28,6 +28,7 @@
   "homepage": "https://github.com/samsonovkirill/project-lvl2-s281#readme",
   "dependencies": {
     "commander": "^2.15.1",
+    "ini": "^1.3.5",
     "js-yaml": "^3.12.0",
     "lodash": "^4.17.10"
   },
