@@ -16,7 +16,7 @@ const getDiffObject = (beforeFile, afterFile) => {
     if (beforeFile[key] !== afterFile[key]) {
       return [...acc, {
         key,
-        value: beforeFile[key],
+        oldValue: beforeFile[key],
         newValue: afterFile[key],
         type: 'modified',
       }];
@@ -28,7 +28,7 @@ const getDiffObject = (beforeFile, afterFile) => {
 const constructString = {
   new: ({ key, value }) => ` + ${key}: ${value}\n`,
   deleted: ({ key, value }) => ` - ${key}: ${value}\n`,
-  modified: ({ key, value, newValue }) => ` + ${key}: ${newValue}\n - ${key}: ${value}\n`,
+  modified: ({ key, oldValue, newValue }) => ` + ${key}: ${newValue}\n - ${key}: ${oldValue}\n`,
   unmodified: ({ key, value }) => `   ${key}: ${value}\n`,
 };
 

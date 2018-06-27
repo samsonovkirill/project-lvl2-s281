@@ -1,5 +1,5 @@
-import genDiffs from '../src';
 import fs from 'fs';
+import genDiffs from '../src';
 
 const fixPath = '__tests__/__fixtures__';
 
@@ -52,11 +52,11 @@ describe('YAML test suite #2', () => {
 
 describe('Common error suites #3', () => {
   test('File not exists #1', () => {
-    const path1 = `undefined1`;
-    const path2 = `undefined2`;
+    const path1 = 'undefined1';
+    const path2 = 'undefined2';
     expect(() => {
       genDiffs(path1, path2);
-    }).toThrowError("ENOENT");
+    }).toThrowError('ENOENT');
   });
 
   test('File contains corrupted JSON #2', () => {

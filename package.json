@@ -38,11 +38,12 @@
     "babel-jest": "^23.2.0",
     "babel-preset-env": "*",
     "babel-preset-stage-0": "*",
-    "eslint": "*",
-    "eslint-config-airbnb-base": "*",
+    "eslint": "^5.0.1",
+    "eslint-config-airbnb-base": "^13.0.0",
     "eslint-plugin-babel": "^5.1.0",
     "eslint-plugin-import": "*",
-    "jest": "^23.1.0",
+    "eslint-plugin-jest": "^21.17.0",
+    "jest": "^23.2.0",
     "regenerator-runtime": "^0.12.0"
   },
   "bin": {

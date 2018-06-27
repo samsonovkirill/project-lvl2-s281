@@ -14,3 +14,6 @@ build:
 	npm run build
 	npm run eslint .
 	npm run test
+travis:
+	npm run eslint .
+	npm run test

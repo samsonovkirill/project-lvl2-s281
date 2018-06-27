@@ -1,5 +1,6 @@
 env:
   node: true
+  jest: true
 
 parser: babel-eslint
 
@@ -8,6 +9,7 @@ extends:
 
 plugins:
   - 'eslint-plugin-import'
+  - 'jest'
 
 rules:
   no-console: 0
