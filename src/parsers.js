@@ -8,9 +8,9 @@ const parsers = {
 };
 
 export default format => (data) => {
-  const parser = parsers[format];
-  if (!parser) {
+  const parse = parsers[format];
+  if (!parse) {
     throw new Error(`Format ${format} is not supported`);
   }
-  return parser(data);
+  return parse(data);
 };

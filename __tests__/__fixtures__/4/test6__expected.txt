@@ -1,0 +1,45 @@
+{
+   common: {
+      setting1: Value 1
+    - setting2: 200
+    + setting3: {
+         key: value
+      }
+    - setting3: true
+      setting6: {
+         key: value
+       + ops: vops
+       + opsops: {
+            neste: yes
+            nested: onemore
+            neste+: oh
+         }
+      }
+    - group1: {
+         baz: bas
+         foo: bar
+         nest: {
+            key: value
+         }
+      }
+    - group2: {
+         abc: 12345
+      }
+    + setting4: blah blah
+    + setting5: {
+         key5: value5
+         key5-2: {
+            nested: value
+         }
+      }
+   }
+ + follow: true
+ + group1: {
+      foo: bar
+      baz: bars
+      nest: str
+   }
+ + group3: {
+      fee: 100500
+   }
+}
