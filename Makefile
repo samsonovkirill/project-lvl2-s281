@@ -11,3 +11,9 @@ test:
 watch:
 	npm run watch
 travis: lint test
+
+build:
+	npm run build
+	npm run eslint .
+	npm run test
+

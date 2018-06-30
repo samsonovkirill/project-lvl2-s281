@@ -1,0 +1,2 @@
+Property 'config.auto' was removed
+Property 'config.configuration' was added with complex value

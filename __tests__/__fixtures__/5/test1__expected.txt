@@ -1,0 +1,1 @@
+Property 'config.auto' was updated. From 'false' to 'true' value

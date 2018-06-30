@@ -2,49 +2,72 @@ import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import getParser from './parsers';
-import render from './renders';
+import getRenderer from './renderers';
 
+const keyTypes = [
+  {
+    type: 'nested',
+    check: (before, after, key) => (_.isObject(before[key]) && _.isObject(after[key])
+      && !_.isArray(before[key]) && !_.isArray(after[key])),
+    proccess: (beforeValue, afterValue, fn) => ({
+      children: fn(beforeValue, afterValue),
+    }),
+  },
+  {
+    type: 'new',
+    check: (before, after, key) => (!_.has(before, key) && _.has(after, key)),
+    proccess: (beforeValue, afterValue) => ({
+      value: afterValue,
+    }),
+  },
+  {
+    type: 'deleted',
+    check: (before, after, key) => (_.has(before, key) && !_.has(after, key)),
+    proccess: beforeValue => ({
+      value: beforeValue,
+    }),
+  },
+  {
+    type: 'modified',
+    check: (before, after, key) => (_.has(before, key) && _.has(after, key)
+        && before[key] !== after[key]),
+    proccess: (beforeValue, afterValue) => ({
+      value: { old: beforeValue, new: afterValue },
+    }),
+  },
+  {
+    type: 'unmodified',
+    check: (before, after, key) => (_.has(before, key) && _.has(after, key)
+      && before[key] === after[key]),
+    proccess: beforeValue => ({
+      value: beforeValue,
+    }),
+  },
+];
 
-const compareValues = (key, before, after) => {
-  if (!_.has(before, key)) {
-    return { key, value: after[key], type: 'new' };
-  }
-  if (!_.has(after, key)) {
-    return { key, value: before[key], type: 'deleted' };
-  }
-  if (before[key] !== after[key]) {
+const getDiffsTree = (before, after) => {
+  const keysCombination = _.union(Object.keys(before), Object.keys(after));
+  return keysCombination.map((key) => {
+    const { type, proccess } = _.find(keyTypes, item => item.check(before, after, key));
+    const { value, children } = proccess(before[key], after[key], getDiffsTree);
     return {
       key,
-      oldValue: before[key],
-      newValue: after[key],
-      type: 'modified',
+      type,
+      value,
+      children,
     };
-  }
-  return { key, value: before[key], type: 'unmodified' };
+  });
 };
 
-const bothAreObjects = (obj1, obj2) => typeof obj1 === 'object' && typeof obj2 === 'object';
-
-const getDiffs = (before, after) => {
-  const resultKeys = _.union(Object.keys(before), Object.keys(after));
-  return resultKeys.reduce((acc, key) => {
-    if (bothAreObjects(before[key], after[key])) {
-      const diffs = getDiffs(before[key], after[key]);
-      return [...acc, { key, children: diffs, type: 'node' }];
-    }
-    return [...acc, compareValues(key, before, after)];
-  }, []);
-};
-
-
-const genDiffs = (beforeFilePath, afterFilePath) => {
+const genDiffs = (beforeFilePath, afterFilePath, format = 'tree') => {
   const beforeFileRaw = fs.readFileSync(beforeFilePath, 'utf8');
   const afterFileRaw = fs.readFileSync(afterFilePath, 'utf8');
-  const format = path.extname(beforeFilePath).slice(1);
-  const parse = getParser(format);
+  const extension = path.extname(beforeFilePath).slice(1);
+  const parse = getParser(extension);
   const beforeFileData = parse(beforeFileRaw);
   const afterFileData = parse(afterFileRaw);
-  const diffs = getDiffs(beforeFileData, afterFileData);
+  const diffs = getDiffsTree(beforeFileData, afterFileData);
+  const render = getRenderer(format);
   const renderedDiffs = render(diffs);
   return renderedDiffs;
 };

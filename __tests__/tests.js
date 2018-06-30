@@ -109,7 +109,31 @@ describe('Nested structure files #4', () => {
   });
 });
 
-describe('Common error suites #5', () => {
+describe('Plain output format #5', () => {
+  const format = 'plain';
+  test('Calculate diffs between two JSON files #1', () => {
+    const path1 = `${fixPath}/5/test1__before.json`;
+    const path2 = `${fixPath}/5/test1__after.json`;
+    const result = fs.readFileSync(`${fixPath}/5/test1__expected.txt`, 'utf8');
+    expect(genDiffs(path1, path2, format)).toBe(result);
+  });
+
+  test('Calculate diffs between two JSON files #2', () => {
+    const path1 = `${fixPath}/5/test2__before.json`;
+    const path2 = `${fixPath}/5/test2__after.json`;
+    const result = fs.readFileSync(`${fixPath}/5/test2__expected.txt`, 'utf8');
+    expect(genDiffs(path1, path2, format)).toBe(result);
+  });
+
+  test('Calculate diffs between two JSON files add or del object #3', () => {
+    const path1 = `${fixPath}/5/test3__before.json`;
+    const path2 = `${fixPath}/5/test3__after.json`;
+    const result = fs.readFileSync(`${fixPath}/5/test3__expected.txt`, 'utf8');
+    expect(genDiffs(path1, path2, format)).toBe(result);
+  });
+});
+
+describe('Common error suites #6', () => {
   test('File not exists #1', () => {
     const path1 = 'undefined1';
     const path2 = 'undefined2';
@@ -119,7 +143,7 @@ describe('Common error suites #5', () => {
   });
 
   test('File contains corrupted JSON #2', () => {
-    const path1 = `${fixPath}/5/corrupted.json`;
+    const path1 = `${fixPath}/6/corrupted.json`;
     const path2 = `${fixPath}/1/test1-2__before.json`;
     expect(() => {
       genDiffs(path1, path2);
@@ -127,8 +151,8 @@ describe('Common error suites #5', () => {
   });
 
   test('File contains corrupted YAML #3', () => {
-    const path1 = `${fixPath}/5/corrupted.yml`;
-    const path2 = `${fixPath}/5/corrupted.yml`;
+    const path1 = `${fixPath}/6/corrupted.yml`;
+    const path2 = `${fixPath}/6/corrupted.yml`;
     expect(() => {
       genDiffs(path1, path2);
     }).toThrow();
