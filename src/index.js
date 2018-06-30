@@ -32,7 +32,8 @@ const keyTypes = [
     check: (before, after, key) => (_.has(before, key) && _.has(after, key)
         && before[key] !== after[key]),
     proccess: (beforeValue, afterValue) => ({
-      value: { old: beforeValue, new: afterValue },
+      oldValue: beforeValue,
+      newValue: afterValue,
     }),
   },
   {
@@ -49,12 +50,11 @@ const getDiffsTree = (before, after) => {
   const keysCombination = _.union(Object.keys(before), Object.keys(after));
   return keysCombination.map((key) => {
     const { type, proccess } = _.find(keyTypes, item => item.check(before, after, key));
-    const { value, children } = proccess(before[key], after[key], getDiffsTree);
+    const params = proccess(before[key], after[key], getDiffsTree);
     return {
       key,
       type,
-      value,
-      children,
+      ...params,
     };
   });
 };
@@ -68,8 +68,7 @@ const genDiffs = (beforeFilePath, afterFilePath, format = 'tree') => {
   const afterFileData = parse(afterFileRaw);
   const diffs = getDiffsTree(beforeFileData, afterFileData);
   const render = getRenderer(format);
-  const renderedDiffs = render(diffs);
-  return renderedDiffs;
+  return render(diffs);
 };
 
 export default genDiffs;

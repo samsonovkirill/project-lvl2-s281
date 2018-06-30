@@ -13,8 +13,7 @@ const makePrefix = (path) => {
 const stringBuilders = {
   new: ({ key, value }, path) => `Property '${makePrefix(path)}${key}' was added with ${stringify(value)} value\n`,
   deleted: ({ key }, path) => `Property '${makePrefix(path)}${key}' was removed\n`,
-  modified: ({ key, value }, path) => `Property '${makePrefix(path)}${key}' was updated. From ${stringify(value.old)} to ${stringify(value.new)} value\n`,
-  unmodified: () => '',
+  modified: ({ key, oldValue, newValue }, path) => `Property '${makePrefix(path)}${key}' was updated. From ${stringify(oldValue)} to ${stringify(newValue)} value\n`,
   nested: ({ children, key }, path, render) => render(children, [...path, key]),
 };
 
@@ -26,10 +25,14 @@ const getItemRenderer = ({ type }) => (item, path, render) => {
   return `${stringBuilder(item, path, render)}`;
 };
 
-const render = (diffs, path = []) => diffs.reduce((acc, item) => {
-  const renderItem = getItemRenderer(item);
-  const renderedItem = renderItem(item, path, render);
-  return `${acc}${renderedItem}`;
-}, '');
+const render = (diffs, path = []) => {
+  const modifiedOnly = diffs.filter(item => item.type !== 'unmodified');
+  return modifiedOnly.reduce((acc, item) => {
+    const renderItem = getItemRenderer(item);
+    const renderedItem = renderItem(item, path, render);
+    return `${acc}${renderedItem}`;
+  }, '');
+};
+
 
 export default render;
