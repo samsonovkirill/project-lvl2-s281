@@ -139,5 +139,3 @@ kirill$ gendiff before.json after.json --format json
 [{"key":"host","type":"unmodified","value":"hexlet.io"},{"key":"proxy","type":"unmodified","value":"123.234.53.22"},{"key":"follow","type":"unmodified","value":false},{"key":"port","type":"unmodified","value":80},{"key":"config","type":"nested","children":[{"key":"backup","type":"unmodified","value":"none"},{"key":"auto","type":"deleted","value":"yes"},{"key":"configuration","type":"new","value":{"param":"value"}}]}]
 
 ```
-
-Data and stats attributes are not mandatory. If there is no delete/insertion/modify actions "deleted"/"new"/"modified" will be ommited.
