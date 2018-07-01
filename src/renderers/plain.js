@@ -1,10 +1,15 @@
-import { makePrefix, getItemHandler } from './utils';
+import getItemHandler from './utils';
 
 const stringify = (item) => {
   if (typeof item === 'object') {
     return 'complex';
   }
   return `'${item}'`;
+};
+
+const makePrefix = (path) => {
+  const prefix = path.join('.');
+  return prefix.length === 0 ? prefix : `${prefix}.`;
 };
 
 const stringBuilders = {

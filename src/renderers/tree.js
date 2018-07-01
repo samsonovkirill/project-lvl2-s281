@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { getItemHandler } from './utils';
+import getItemHandler from './utils';
 
 const indentSpacesCount = 3;
 

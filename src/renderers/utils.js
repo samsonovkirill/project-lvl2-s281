@@ -1,8 +1,3 @@
-const makePrefix = (path) => {
-  const prefix = path.join('.');
-  return prefix.length === 0 ? prefix : `${prefix}.`;
-};
-
 const getItemHandler = ({ type }, handlersList) => (item, ...args) => {
   const handler = handlersList[type];
   if (!handler) {
@@ -11,4 +6,4 @@ const getItemHandler = ({ type }, handlersList) => (item, ...args) => {
   return handler(item, ...args);
 };
 
-export { makePrefix, getItemHandler };
+export default getItemHandler;

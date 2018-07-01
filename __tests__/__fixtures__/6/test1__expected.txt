@@ -1,1 +1,1 @@
-{"data":{"modified":[{"key":"config.auto","oldValue":false,"newValue":true}]},"stats":{"modified":1,"affected":1}}
+[{"key":"host","type":"unmodified","value":"hexlet.io"},{"key":"proxy","type":"unmodified","value":"123.234.53.22"},{"key":"follow","type":"unmodified","value":false},{"key":"port","type":"unmodified","value":80},{"key":"config","type":"nested","children":[{"key":"backup","type":"unmodified","value":"none"},{"key":"auto","type":"modified","oldValue":false,"newValue":true}]}]
