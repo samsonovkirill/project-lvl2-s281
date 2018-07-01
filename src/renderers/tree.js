@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { getItemHandler } from './utils';
 
 const indentSpacesCount = 3;
 
@@ -20,30 +21,24 @@ const stringify = (item, depth) => {
 };
 
 const stringBuilders = {
-  new: ({ key, value }, depth) => ` + ${key}: ${stringify(value, depth + 1)}\n`,
-  deleted: ({ key, value }, depth) => ` - ${key}: ${stringify(value, depth + 1)}\n`,
-  modified: ({ key, oldValue, newValue }, depth) => [` + ${key}: ${stringify(newValue, depth + 1)}\n`, ` - ${key}: ${stringify(oldValue, depth + 1)}\n`],
-  unmodified: ({ key, value }) => `   ${key}: ${value}\n`,
+  new: ({ key, value }, depth) => ` + ${key}: ${stringify(value, depth + 1)}`,
+  deleted: ({ key, value }, depth) => ` - ${key}: ${stringify(value, depth + 1)}`,
+  modified: ({ key, oldValue, newValue }, depth) => [` + ${key}: ${stringify(newValue, depth + 1)}`, ` - ${key}: ${stringify(oldValue, depth + 1)}`],
+  unmodified: ({ key, value }) => `   ${key}: ${value}`,
   nested: ({ key, children }, depth, render) => `   ${key}: ${render(children, depth + 1)}`,
 };
 
-const getItemRenderer = ({ type }) => (item, depth, render) => {
-  const stringBuilder = stringBuilders[type];
-  if (!stringBuilder) {
-    throw new Error(`Type: ${type} is not supported`);
-  }
-  return stringBuilder(item, depth, render);
-};
-
-const render = (diffs, depth = 0) => {
+const renderBody = (diffs, depth = 0) => {
   const body = diffs.reduce((acc, item) => {
-    const renderItem = getItemRenderer(item);
-    const renderedItem = renderItem(item, depth, render);
+    const renderItem = getItemHandler(item, stringBuilders);
+    const renderedItem = renderItem(item, depth, renderBody);
     return [...acc, renderedItem];
   }, []);
   const spaces = ' '.repeat(depth * indentSpacesCount);
-  const bodyWithIndents = _.flatten(body).map(item => `${spaces}${item}`).join('');
-  return `{\n${bodyWithIndents}${spaces}}\n`;
+  const bodyWithIndents = _.flatten(body).map(item => `${spaces}${item}`).join('\n');
+  return `{\n${bodyWithIndents}\n${spaces}}`;
 };
+
+const render = diffs => `${renderBody(diffs)}\n`;
 
 export default render;

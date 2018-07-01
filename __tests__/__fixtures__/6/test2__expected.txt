@@ -1,0 +1,1 @@
+{"data":{"deleted":[{"key":"config.auto","value":"yes"}],"new":[{"key":"config.configuration","value":{"param":"value"}}]},"stats":{"deleted":1,"new":1,"affected":2}}

@@ -13,7 +13,8 @@ watch:
 travis: lint test
 
 build:
+	rm -rf dist
 	npm run build
-	npm run eslint .
-	npm run test
+	make lint
+	make test
 

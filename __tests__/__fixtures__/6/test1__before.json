@@ -1,0 +1,10 @@
+{
+  "host": "hexlet.io",
+  "proxy": "123.234.53.22",
+  "follow": false,
+  "port": 80,
+  "config": {
+    "backup": "none",
+    "auto": false
+  }
+}
