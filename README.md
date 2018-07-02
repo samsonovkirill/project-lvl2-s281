@@ -60,7 +60,7 @@ Gendiff supports different output formats:
 Use -f flag to set required output format.
 `-f, --format [type]  output format`
 
-### Formats description
+### Output formats description
 
 #### Tree
 Tree output format is a hierarchical tree. Affected key:value pairs are marked by '+' or '-' means option was added or deleted from resulting file. If value was modified it represents two rows with '+' new value and '-' old value. Unmodified pairs displays as is.
@@ -139,3 +139,8 @@ kirill$ gendiff before.json after.json --format json
 [{"key":"host","type":"unmodified","value":"hexlet.io"},{"key":"proxy","type":"unmodified","value":"123.234.53.22"},{"key":"follow","type":"unmodified","value":false},{"key":"port","type":"unmodified","value":80},{"key":"config","type":"nested","children":[{"key":"backup","type":"unmodified","value":"none"},{"key":"auto","type":"deleted","value":"yes"},{"key":"configuration","type":"new","value":{"param":"value"}}]}]
 
 ```
+
+### Configuration format supports
+
+gendiff supports json, yml, ini formats with nested structure.
+You can easily add your own parser in parsers.js.

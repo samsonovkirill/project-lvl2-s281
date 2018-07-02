@@ -1,7 +1,7 @@
 {
   "name": "gendiff-package",
-  "version": "1.0.1",
-  "description": " Compares two configuration files and shows a difference.",
+  "version": "1.0.3",
+  "description": "Compares two configuration files and outputs a difference.",
   "main": "index.js",
   "scripts": {
     "babel-node": "babel-node",
@@ -18,7 +18,13 @@
   "keywords": [
     "gendiff",
     "configuration",
-    "difference"
+    "difference",
+    "compare",
+    "json",
+    "ini",
+    "yaml",
+    "yml",
+    "diff"
   ],
   "author": "Kirill Samsonov",
   "license": "ISC",
