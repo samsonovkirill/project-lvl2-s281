@@ -4,6 +4,8 @@ import _ from 'lodash';
 import getParser from './parsers';
 import getRenderer from './renderers';
 
+const bothPresent = (before, after, key) => _.has(before, key) && _.has(after, key);
+
 const keyTypes = [
   {
     type: 'nested',
@@ -29,8 +31,7 @@ const keyTypes = [
   },
   {
     type: 'modified',
-    check: (before, after, key) => (_.has(before, key) && _.has(after, key)
-        && before[key] !== after[key]),
+    check: (before, after, key) => (bothPresent(before, after, key) && before[key] !== after[key]),
     proccess: (beforeValue, afterValue) => ({
       oldValue: beforeValue,
       newValue: afterValue,
@@ -38,8 +39,7 @@ const keyTypes = [
   },
   {
     type: 'unmodified',
-    check: (before, after, key) => (_.has(before, key) && _.has(after, key)
-      && before[key] === after[key]),
+    check: (before, after, key) => (bothPresent(before, after, key) && before[key] === after[key]),
     proccess: beforeValue => ({
       value: beforeValue,
     }),
