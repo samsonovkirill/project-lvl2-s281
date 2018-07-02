@@ -1,7 +1,8 @@
 import _ from 'lodash';
-import getItemHandler from './utils';
+import getHandlerByType from '../utils';
 
 const indentSpacesCount = 3;
+const shift = depth => ' '.repeat(depth * indentSpacesCount);
 
 const stringify = (item, depth) => {
   if (!_.isObject(item)) {
@@ -15,30 +16,30 @@ const stringify = (item, depth) => {
     const stringified = stringify(curItem, depth + 1);
     return [...acc, `${key}: ${stringified}`];
   }, []);
-  const spaces = ' '.repeat(depth * indentSpacesCount);
+  const spaces = shift(depth);
   const indentBody = body.map(key => `${spaces}   ${key}`).join('\n');
   return `{\n${indentBody}\n${spaces}}`;
 };
 
+const pair = ({ key, value }, depth) => `${key}: ${stringify(value, depth)}`;
 const stringBuilders = {
-  new: ({ key, value }, depth) => ` + ${key}: ${stringify(value, depth + 1)}`,
-  deleted: ({ key, value }, depth) => ` - ${key}: ${stringify(value, depth + 1)}`,
-  modified: ({ key, oldValue, newValue }, depth) => [` + ${key}: ${stringify(newValue, depth + 1)}`, ` - ${key}: ${stringify(oldValue, depth + 1)}`],
-  unmodified: ({ key, value }) => `   ${key}: ${value}`,
-  nested: ({ key, children }, depth, render) => `   ${key}: ${render(children, depth + 1)}`,
+  new: (...args) => ` + ${pair(...args)}`,
+  deleted: (...args) => ` - ${pair(...args)}`,
+  modified: ({ key, oldValue, newValue }, depth) => [` + ${key}: ${stringify(newValue, depth)}`, ` - ${key}: ${stringify(oldValue, depth)}`],
+  unmodified: (...args) => `   ${pair(...args)}`,
+  nested: ({ key, children }, depth, render) => `   ${key}: ${render(children, depth)}`,
 };
 
-const renderBody = (diffs, depth = 0) => {
+
+const render = (diffs, depth = 0) => {
   const body = diffs.reduce((acc, item) => {
-    const renderItem = getItemHandler(item, stringBuilders);
-    const renderedItem = renderItem(item, depth, renderBody);
+    const renderItem = getHandlerByType(item.type, stringBuilders);
+    const renderedItem = renderItem(item, depth + 1, render);
     return [...acc, renderedItem];
   }, []);
-  const spaces = ' '.repeat(depth * indentSpacesCount);
+  const spaces = shift(depth);
   const bodyWithIndents = _.flatten(body).map(item => `${spaces}${item}`).join('\n');
   return `{\n${bodyWithIndents}\n${spaces}}`;
 };
-
-const render = diffs => `${renderBody(diffs)}\n`;
 
 export default render;

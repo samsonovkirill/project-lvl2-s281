@@ -1,4 +1,4 @@
-import getItemHandler from './utils';
+import getHandlerByType from '../utils';
 
 const stringify = (item) => {
   if (typeof item === 'object') {
@@ -19,16 +19,14 @@ const stringBuilders = {
   nested: ({ children, key }, path, render) => render(children, [...path, key]),
 };
 
-const renderBody = (diffs, path = []) => {
+const render = (diffs, path = []) => {
   const affectedItems = diffs.filter(item => item.type !== 'unmodified');
   const body = affectedItems.reduce((acc, item) => {
-    const renderItem = getItemHandler(item, stringBuilders);
-    const renderedItem = renderItem(item, path, renderBody);
+    const renderItem = getHandlerByType(item.type, stringBuilders);
+    const renderedItem = renderItem(item, path, render);
     return [...acc, renderedItem];
   }, []);
   return body.join('\n');
 };
-
-const render = diffs => `${renderBody(diffs)}\n`;
 
 export default render;

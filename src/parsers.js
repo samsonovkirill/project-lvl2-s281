@@ -1,5 +1,6 @@
 import { safeLoad } from 'js-yaml';
 import ini from 'ini';
+import getHandlerByType from './utils';
 
 const parsers = {
   json: JSON.parse,
@@ -7,10 +8,4 @@ const parsers = {
   ini: ini.parse,
 };
 
-export default format => (data) => {
-  const parse = parsers[format];
-  if (!parse) {
-    throw new Error(`Format ${format} is not supported`);
-  }
-  return parse(data);
-};
+export default format => getHandlerByType(format, parsers);
